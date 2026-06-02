@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎂 Aniversariantes do Grupo dos Casais • Parabéns da Xuxa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&amp;family=Inter:wght@400;500;600&amp;display=swap');
+        
+        :root {
+            --primary: #ec4899;
+        }
+        
+        body {
+            font-family: 'Inter', system_ui, sans-serif;
+        }
+        
+        .title-font {
+            font-family: 'Poppins', system_ui, sans-serif;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+        }
+
+        .calendar-day {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .calendar-day:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+
+        .birthday-day {
+            background: linear-gradient(135deg, #ec4899, #a855f7);
+            color: white;
+            box-shadow: 0 10px 15px -3px rgb(236 72 153 / 0.3), 0 4px 6px -4px rgb(236 72 153 / 0.3);
+        }
+
+        .birthday-day:hover {
+            transform: scale(1.05) !important;
+            box-shadow: 0 20px 25px -5px rgb(236 72 153 / 0.4), 0 8px 10px -6px rgb(236 72 153 / 0.4);
+        }
+
+        .confetto {
+            position: fixed;
+            z-index: 9999;
+            pointer-events: none;
+            user-select: none;
+            font-size: 1.5rem;
+            animation: confetti-fall linear forwards;
+        }
+
+        .section-title {
+            font-size: 1.75rem;
+            line-height: 1.1;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+        }
+
+        .aniversario-card {
+            transition: transform 0.2s cubic-bezier(0.4, 0.0, 0.2, 1), 
+                       box-shadow 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+        
+        .aniversario-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        .modal {
+            animation: modal-pop 0.2s ease-out forwards;
+        }
+
+        @keyframes modal-pop {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .day-number {
+            font-size: 1.35rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .modern-shadow {
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.08), 
+                       0 4px 6px -4px rgb(0 0 0 / 0.08);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-pink-50 via-purple-50 to-yellow-50 min-h-screen">
+    <!-- HEADER -->
+    <nav class="bg-white/90 backdrop-blur-xl border-b border-pink-100 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-x-4">
+                <div class="w-14 h-14 bg-gradient-to-br from-pink-500 via-purple-500 to-yellow-400 rounded-2xl flex items-center justify-center shadow-lg">
+                    <span class="text-white text-4xl">🎂</span>
+                </div>
+                <div>
+                    <h1 class="title-font text-3xl font-extrabold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent tracking-tighter">Aniversariantes</h1>
+                    <p class="text-[10px] text-pink-600/80 -mt-1 font-medium tracking-[1.5px]">DO GRUPO DOS CASAIS</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-x-3">
+                <!-- Current Date -->
+                <div class="hidden md:flex items-center bg-white px-4 py-2 rounded-2xl border border-pink-100 shadow-sm">
+                    <i class="fa-regular fa-calendar text-pink-500 mr-2"></i>
+                    <span id="currentDateHeader" class="text-sm font-semibold text-gray-700"></span>
+                </div>
+                
+                <!-- Music Button -->
+                <button onclick="playParabens()" 
+                        class="group flex items-center gap-x-2.5 px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-semibold text-sm rounded-2xl shadow-lg hover:shadow-xl active:scale-[0.985] transition-all">
+                    <i class="fa-solid fa-music group-hover:scale-110 transition-transform"></i>
+                    <span class="hidden sm:inline">Tocar Parabéns da Xuxa</span>
+                    <span class="sm:hidden">🎵</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto px-5 pt-8 pb-16">
+        
+        <!-- HERO / STATUS -->
+        <div id="statusSection" class="mb-10">
+            <!-- Populated dynamically by JS -->
+        </div>
+
+        <!-- CALENDAR SECTION -->
+        <div class="mb-10">
+            <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-y-3 mb-5 px-1">
+                <div>
+                    <h2 class="section-title text-gray-900 flex items-center gap-x-3">
+                        <span>📅</span> 
+                        <span>Calendário de Aniversários</span>
+                    </h2>
+                    <p class="text-gray-500 text-sm mt-1">Clique nos dias destacados para ver os detalhes</p>
+                </div>
+                
+                <div class="flex items-center gap-x-2">
+                    <button onclick="prevMonth()" 
+                            class="w-11 h-11 flex items-center justify-center bg-white hover:bg-pink-50 border border-pink-100 text-pink-600 rounded-2xl transition-colors shadow-sm active:scale-95">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+                    
+                    <div class="px-6 py-2.5 bg-white border border-pink-100 rounded-2xl shadow-sm min-w-[170px] text-center">
+                        <span id="calendarTitle" class="font-bold text-xl text-gray-800"></span>
+                    </div>
+                    
+                    <button onclick="nextMonth()" 
+                            class="w-11 h-11 flex items-center justify-center bg-white hover:bg-pink-50 border border-pink-100 text-pink-600 rounded-2xl transition-colors shadow-sm active:scale-95">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                    
+                    <button onclick="goToToday()" 
+                            class="ml-1 px-5 py-2.5 text-sm font-semibold bg-white hover:bg-yellow-50 border border-yellow-200 text-yellow-600 rounded-2xl transition-all flex items-center gap-x-2 shadow-sm active:scale-95">
+                        <i class="fa-solid fa-calendar-day"></i>
+                        <span class="hidden md:inline">Hoje</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Calendar -->
+            <div class="bg-white rounded-3xl shadow-xl border border-pink-100 p-6 md:p-8 modern-shadow">
+                <!-- Weekdays -->
+                <div class="grid grid-cols-7 gap-2 mb-3 px-2">
+                    <div class="text-center text-xs font-bold text-pink-400/90 tracking-widest py-1">DOM</div>
+                    <div class="text-center text-xs font-bold text-pink-400/90 tracking-widest py-1">SEG</div>
+                    <div class="text-center text-xs font-bold text-pink-400/90 tracking-widest py-1">TER</div>
+                    <div class="text-center text-xs font-bold text-pink-400/90 tracking-widest py-1">QUA</div>
+                    <div class="text-center text-xs font-bold text-pink-400/90 tracking-widest py-1">QUI</div>
+                    <div class="text-center text-xs font-bold text-pink-400/90 tracking-widest py-1">SEX</div>
+                    <div class="text-center text-xs font-bold text-pink-400/90 tracking-widest py-1">SÁB</div>
+                </div>
+                
+                <!-- Days Grid -->
+                <div id="calendarGrid" class="grid grid-cols-7 gap-2">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- NEXT + FULL LIST -->
+        <div class="grid lg:grid-cols-12 gap-8">
+            
+            <!-- Próximo Aniversário Card -->
+            <div class="lg:col-span-5">
+                <div class="bg-white border border-pink-100 rounded-3xl p-7 shadow-xl h-full modern-shadow">
+                    <div class="flex items-center gap-x-3 mb-4">
+                        <div class="px-4 py-1.5 bg-gradient-to-r from-pink-500 to-purple-500 text-white text-xs font-bold tracking-widest rounded-2xl flex items-center gap-x-2">
+                            <i class="fa-solid fa-clock"></i>
+                            <span>PRÓXIMO</span>
+                        </div>
+                    </div>
+                    
+                    <div id="proximoContent">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Lista de Todos -->
+            <div class="lg:col-span-7">
+                <div class="flex items-center justify-between mb-4 px-1">
+                    <h3 class="font-bold text-2xl text-gray-800 flex items-center gap-x-3">
+                        <span>🎁</span> 
+                        <span>Todos os Aniversariantes</span>
+                    </h3>
+                    <span class="text-xs px-3 py-1 bg-pink-100 text-pink-600 font-medium rounded-2xl">Ordenados por proximidade</span>
+                </div>
+                
+                <div id="listaAniversariantes" 
+                     class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3 max-h-[380px] overflow-y-auto pr-2 custom-scroll">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- DAY DETAIL MODAL -->
+    <div id="dayModal" onclick="if (event.target.id === 'dayModal') closeDayModal()" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+        <div onclick="event.stopImmediatePropagation()" class="bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden modal">
+            <!-- Header -->
+            <div class="bg-gradient-to-r from-pink-500 to-purple-600 px-7 py-5 flex items-center justify-between">
+                <div class="flex items-center gap-x-3 text-white">
+                    <i class="fa-solid fa-birthday-cake text-3xl"></i>
+                    <div>
+                        <div class="font-bold text-xl">Aniversário!</div>
+                        <div id="modalDate" class="text-pink-100 text-sm"></div>
+                    </div>
+                </div>
+                <button onclick="closeDayModal()" class="text-white/80 hover:text-white transition-colors text-3xl leading-none">&times;</button>
+            </div>
+            
+            <div class="p-7">
+                <div id="modalNames" class="text-center">
+                    <!-- Populated by JS -->
+                </div>
+                
+                <div class="mt-6 flex justify-center">
+                    <button onclick="playParabensFromModal()" 
+                            class="flex items-center justify-center gap-x-3 px-8 py-3.5 bg-gradient-to-r from-pink-500 to-purple-600 hover:brightness-105 text-white font-bold rounded-2xl shadow-lg active:scale-[0.985] transition-all text-sm">
+                        <i class="fa-solid fa-play mr-1"></i> 
+                        <span>TOCAR PARABÉNS DA XUXA</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- YOUTUBE PLAYER MODAL -->
+    <div id="playerModal" onclick="if (event.target.id === 'playerModal') closePlayerModal()" class="hidden fixed inset-0 bg-black/70 backdrop-blur-md z-[110] flex items-center justify-center p-4">
+        <div onclick="event.stopImmediatePropagation()" class="bg-white w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden modal">
+            <!-- Modal Header -->
+            <div class="px-6 py-4 bg-gradient-to-r from-pink-600 to-purple-700 flex items-center justify-between text-white">
+                <div class="flex items-center gap-x-3">
+                    <i class="fa-solid fa-music text-2xl"></i>
+                    <div>
+                        <div class="font-extrabold text-xl tracking-tight">Parabéns da Xuxa</div>
+                        <div class="text-pink-200 text-xs -mt-0.5">Xou da Xuxa • 1986</div>
+                    </div>
+                </div>
+                <button onclick="closePlayerModal()" class="text-white/70 hover:text-white text-3xl leading-none w-9 h-9 flex items-center justify-center">&times;</button>
+            </div>
+            
+            <!-- Video Container -->
+            <div class="aspect-video bg-black">
+                <iframe id="youtubeFrame" width="100%" height="100%" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen></iframe>
+            </div>
+            
+            <div class="px-6 py-4 bg-gray-50 flex items-center justify-center gap-x-2 text-sm">
+                <div class="flex items-center text-pink-600">
+                    <i class="fa-solid fa-heart mr-1.5"></i>
+                    <span class="font-medium">Cante junto com a Xuxa!</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="text-center py-8 text-xs text-gray-400">
+        Feito com <span class="text-pink-400">❤️</span> para a turma • Inspire-se e celebre cada dia especial
+    </footer>
+
+    <script>
+        // Tailwind script
+        function initTailwind() {
+            document.documentElement.style.setProperty('--accent', '#ec4899');
+            
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        fontFamily: {
+                            'title': ['Poppins', 'system-ui', 'sans-serif']
+                        }
+                    }
+                }
+            };
+        }
+
+        // Data
+        const aniversariantes = [
+            { nome: "Isis", dia: 7, mes: 2 },
+            { nome: "Rafael", dia: 19, mes: 2 },
+            { nome: "Dudu", dia: 13, mes: 3 },
+            { nome: "Márcia", dia: 15, mes: 3 },
+            { nome: "Michael", dia: 22, mes: 3 },
+            { nome: "Anna Julia", dia: 24, mes: 3 },
+            { nome: "Bruna", dia: 29, mes: 3 },
+            { nome: "Jaqueline", dia: 2, mes: 4 },
+            { nome: "João Pedro", dia: 23, mes: 4 },
+            { nome: "Rodrigo", dia: 28, mes: 5 },
+            { nome: "Fabiana", dia: 30, mes: 5 },
+            { nome: "Priscila", dia: 20, mes: 6 },
+            { nome: "Eliza", dia: 10, mes: 7 },
+            { nome: "Luciana", dia: 1, mes: 8 },
+            { nome: "Fabiano", dia: 19, mes: 8 },
+            { nome: "Isa", dia: 26, mes: 8 },
+            { nome: "Lian", dia: 1, mes: 9 },
+            { nome: "Celso", dia: 19, mes: 9 },
+            { nome: "Juliana", dia: 16, mes: 10 },
+            { nome: "Will", dia: 19, mes: 10 },
+            { nome: "Arthur", dia: 12, mes: 11 },
+            { nome: "Maria", dia: 23, mes: 12 },
+            { nome: "Ana Beatriz", dia: 28, mes: 12 }
+        ];
+
+        const meses = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", 
+                       "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+        
+        const mesesAbrev = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
+
+        let currentYear = new Date().getFullYear();
+        let currentMonth = new Date().getMonth(); // 0-11
+
+        // Helpers
+        function getAniversariantesDoDia(dia, mes) {
+            return aniversariantes
+                .filter(a => a.dia === dia && a.mes === mes)
+                .map(a => a.nome);
+        }
+
+        function getProximoAniversario() {
+            const hoje = new Date();
+            let proximo = null;
+            let menorDiff = Infinity;
+
+            aniversariantes.forEach(a => {
+                let dataProx = new Date(hoje.getFullYear(), a.mes - 1, a.dia);
+                if (dataProx < hoje) {
+                    dataProx.setFullYear(dataProx.getFullYear() + 1);
+                }
+                const diff = dataProx.getTime() - hoje.getTime();
+                if (diff < menorDiff && diff > 0) {
+                    menorDiff = diff;
+                    proximo = { 
+                        ...a, 
+                        dias: Math.ceil(diff / (1000 * 60 * 60 * 24)),
+                        data: dataProx 
+                    };
+                }
+            });
+            
+            // If today is birthday, return with 0 days
+            const hojeAniv = getAniversariantesDoDia(hoje.getDate(), hoje.getMonth() + 1);
+            if (hojeAniv.length > 0) {
+                return { 
+                    nome: hojeAniv.join(" e "), 
+                    dia: hoje.getDate(), 
+                    mes: hoje.getMonth() + 1, 
+                    dias: 0, 
+                    data: hoje 
+                };
+            }
+            
+            return proximo;
+        }
+
+        function getAniversariantesOrdenados() {
+            const hoje = new Date();
+            return aniversariantes.map(a => {
+                let dataProx = new Date(hoje.getFullYear(), a.mes - 1, a.dia);
+                if (dataProx < hoje) {
+                    dataProx.setFullYear(dataProx.getFullYear() + 1);
+                }
+                const diff = dataProx.getTime() - hoje.getTime();
+                return {
+                    ...a,
+                    diasAte: Math.ceil(diff / (1000 * 60 * 60 * 24)),
+                    proximaData: dataProx
+                };
+            }).sort((x, y) => x.diasAte - y.diasAte);
+        }
+
+        // Render current date in header
+        function renderCurrentDate() {
+            const el = document.getElementById('currentDateHeader');
+            const hoje = new Date();
+            const options = { weekday: 'long', day: 'numeric', month: 'long' };
+            let str = hoje.toLocaleDateString('pt-BR', options);
+            str = str.charAt(0).toUpperCase() + str.slice(1);
+            el.innerHTML = str;
+        }
+
+        // Render Status / Hero
+        function renderStatus() {
+            const container = document.getElementById('statusSection');
+            const hoje = new Date();
+            const diaHoje = hoje.getDate();
+            const mesHoje = hoje.getMonth() + 1;
+            
+            const aniversHoje = getAniversariantesDoDia(diaHoje, mesHoje);
+            const proximo = getProximoAniversario();
+
+            if (aniversHoje.length > 0) {
+                // CELEBRATION MODE
+                const nomes = aniversHoje.join(" e ");
+                container.innerHTML = `
+                    <div class="relative bg-gradient-to-br from-pink-500 via-purple-600 to-yellow-400 text-white rounded-3xl p-9 md:p-12 shadow-2xl overflow-hidden">
+                        <!-- Decorative elements -->
+                        <div class="absolute inset-0 bg-[radial-gradient(#ffffff15_0.8px,transparent_1px)] bg-[length:5px_5px]"></div>
+                        <div class="absolute top-6 right-8 text-[120px] opacity-10">🎉</div>
+                        <div class="absolute bottom-4 left-6 text-[90px] opacity-10">🎈</div>
+                        
+                        <div class="relative z-10 text-center">
+                            <div class="flex justify-center gap-x-2 mb-5">
+                                <div class="text-6xl md:text-7xl animate-bounce">🎂</div>
+                                <div class="text-6xl md:text-7xl">🥳</div>
+                            </div>
+                            
+                            <div class="uppercase tracking-[4px] text-xs font-extrabold text-white/70 mb-1">HOJE É UM DIA ESPECIAL</div>
+                            
+                            <h1 class="text-6xl md:text-7xl font-extrabold tracking-tighter mb-3 leading-none">PARABÉNS!</h1>
+                            
+                            <p class="text-3xl md:text-4xl font-semibold mb-7 tracking-tight">${nomes}</p>
+                            
+                            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                                <button onclick="playParabens()" 
+                                        class="group px-9 py-4 bg-white text-pink-600 hover:bg-yellow-100 font-extrabold text-xl rounded-2xl flex items-center justify-center gap-x-3 shadow-xl active:scale-[0.985] transition-all">
+                                    <i class="fa-solid fa-play text-lg group-hover:scale-125 transition-transform"></i>
+                                    <span>TOCAR PARABÉNS DA XUXA</span>
+                                </button>
+                                
+                                <button onclick="launchConfetti()" 
+                                        class="px-7 py-4 bg-white/20 hover:bg-white/30 backdrop-blur text-white font-bold rounded-2xl flex items-center gap-x-2 border border-white/40 transition-all active:scale-95">
+                                    <i class="fa-solid fa-magic"></i>
+                                    <span>Lançar confete!</span>
+                                </button>
+                            </div>
+                            
+                            <p class="mt-6 text-white/75 text-sm">Clique no botão e cante junto com a Xuxa! 🎤</p>
+                        </div>
+                    </div>
+                `;
+                
+                // Auto launch confetti on birthday
+                setTimeout(() => {
+                    launchConfetti();
+                }, 900);
+                
+            } else {
+                // NORMAL MODE
+                const dataFormatada = `${proximo.dia} de ${meses[proximo.mes - 1]}`;
+                
+                container.innerHTML = `
+                    <div class="bg-white border border-pink-100 rounded-3xl p-8 md:p-9 shadow-xl modern-shadow">
+                        <div class="flex flex-col lg:flex-row lg:items-center gap-8">
+                            <div class="flex-1">
+                                <div class="flex items-center gap-x-2 mb-3">
+                                    <span class="px-4 py-1 text-xs font-extrabold tracking-widest bg-yellow-100 text-yellow-600 rounded-2xl">HOJE • ${new Date().toLocaleDateString('pt-BR', {day: 'numeric', month: 'long'})}</span>
+                                </div>
+                                
+                                <h2 class="text-4xl font-extrabold text-gray-800 tracking-tight">Nenhum aniversário hoje</h2>
+                                
+                                <div class="mt-4">
+                                    <div class="text-xl text-gray-600">O próximo aniversário é de</div>
+                                    <div class="mt-1 flex items-baseline gap-x-3">
+                                        <span class="font-extrabold text-4xl text-purple-600">${proximo.nome}</span>
+                                    </div>
+                                    <div class="mt-1 flex items-center gap-x-2 text-lg">
+                                        <span class="font-semibold text-gray-700">${dataFormatada}</span>
+                                        <span class="inline-flex items-center px-3.5 py-px rounded-2xl text-sm font-bold bg-pink-100 text-pink-600">
+                                            <i class="fa-solid fa-clock mr-1.5 text-xs"></i> 
+                                            Faltam ${proximo.dias} dias
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex-shrink-0">
+                                <button onclick="goToNextBirthday()" 
+                                        class="w-full lg:w-auto group px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 transition-all active:scale-[0.985] text-white font-extrabold rounded-2xl flex items-center justify-center gap-x-3 shadow-xl text-base">
+                                    <span>Ver no Calendário</span>
+                                    <i class="fa-solid fa-arrow-right-long group-hover:translate-x-1 transition-transform"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // Render Calendar
+        function renderCalendar() {
+            const grid = document.getElementById('calendarGrid');
+            grid.innerHTML = '';
+            
+            const titleEl = document.getElementById('calendarTitle');
+            titleEl.textContent = `${meses[currentMonth]} ${currentYear}`;
+            
+            const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+            const today = new Date();
+            
+            // Empty days before month starts
+            for (let i = 0; i < firstDay; i++) {
+                const emptyCell = document.createElement('div');
+                emptyCell.className = `h-16 md:h-[88px] bg-gray-50/70 border border-gray-100 rounded-2xl`;
+                grid.appendChild(emptyCell);
+            }
+            
+            // Days of the month
+            for (let d = 1; d <= daysInMonth; d++) {
+                const dayEl = document.createElement('div');
+                
+                const isToday = (currentYear === today.getFullYear() && 
+                                currentMonth === today.getMonth() && 
+                                d === today.getDate());
+                
+                const anivers = getAniversariantesDoDia(d, currentMonth + 1);
+                const hasBirthday = anivers.length > 0;
+                
+                let classes = `h-16 md:h-[88px] border flex flex-col items-center justify-center rounded-2xl cursor-pointer calendar-day `;
+                
+                if (hasBirthday) {
+                    classes += `birthday-day border-transparent text-white `;
+                } else if (isToday) {
+                    classes += `bg-yellow-50 border-yellow-300 ring-2 ring-yellow-300 ring-offset-2 `;
+                } else {
+                    classes += `bg-white border-gray-200 hover:border-pink-200 `;
+                }
+                
+                dayEl.className = classes;
+                
+                if (hasBirthday) {
+                    dayEl.innerHTML = `
+                        <div class="text-center">
+                            <div class="day-number ${isToday ? 'text-white' : ''}">${d}</div>
+                            <div class="mt-px">
+                                <span class="text-base">🎂</span>
+                            </div>
+                            <div class="text-[10px] font-semibold tracking-tight px-1 truncate max-w-[68px] text-center leading-none mt-0.5">
+                                ${anivers[0]}
+                            </div>
+                        </div>
+                    `;
+                    
+                    dayEl.onclick = () => showDayModal(d, currentMonth + 1, anivers);
+                    
+                } else {
+                    dayEl.innerHTML = `
+                        <div class="text-center">
+                            <div class="day-number ${isToday ? 'text-yellow-600' : 'text-gray-700'}">${d}</div>
+                        </div>
+                    `;
+                    
+                    if (isToday) {
+                        dayEl.onclick = () => {
+                            const toast = document.createElement('div');
+                            toast.className = `fixed bottom-6 left-1/2 -translate-x-1/2 bg-yellow-400 text-yellow-900 px-5 py-2 rounded-2xl text-sm font-bold shadow-xl flex items-center gap-x-2 z-[200]`;
+                            toast.innerHTML = `<span>Hoje é dia ${d} de ${meses[currentMonth]}!</span>`;
+                            document.body.appendChild(toast);
+                            setTimeout(() => toast.remove(), 2200);
+                        };
+                    }
+                }
+                
+                grid.appendChild(dayEl);
+            }
+        }
+
+        function prevMonth() {
+            currentMonth--;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            renderCalendar();
+        }
+        
+        function nextMonth() {
+            currentMonth++;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            renderCalendar();
+        }
+        
+        function goToToday() {
+            const hoje = new Date();
+            currentYear = hoje.getFullYear();
+            currentMonth = hoje.getMonth();
+            renderCalendar();
+        }
+
+        function goToNextBirthday() {
+            const proximo = getProximoAniversario();
+            if (!proximo) return;
+            
+            currentMonth = proximo.mes - 1;
+            currentYear = proximo.data.getFullYear();
+            renderCalendar();
+            
+            // Scroll to calendar
+            setTimeout(() => {
+                const cal = document.getElementById('calendarGrid');
+                cal.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                
+                // Briefly highlight the day
+                setTimeout(() => {
+                    const days = document.querySelectorAll('#calendarGrid > div');
+                    days.forEach(day => {
+                        if (day.textContent.includes(proximo.nome) || 
+                            (proximo.dias === 0 && day.textContent.includes(proximo.dia))) {
+                            day.style.transitionDuration = '80ms';
+                            day.style.boxShadow = '0 0 0 4px rgb(236 72 153 / 0.6)';
+                            setTimeout(() => {
+                                day.style.boxShadow = '';
+                            }, 1400);
+                        }
+                    });
+                }, 650);
+            }, 300);
+        }
+
+        // Render full list
+        function renderListaAniversariantes() {
+            const container = document.getElementById('listaAniversariantes');
+            container.innerHTML = '';
+            
+            const ordenados = getAniversariantesOrdenados();
+            
+            ordenados.forEach((item) => {
+                const isToday = item.diasAte === 0;
+                
+                const card = document.createElement('div');
+                card.className = `aniversario-card group bg-white border ${isToday ? 'border-pink-400 ring-1 ring-pink-300' : 'border-pink-100'} rounded-2xl p-4 flex gap-4 items-center cursor-pointer hover:border-pink-300`;
+                
+                let badgeHTML = '';
+                if (isToday) {
+                    badgeHTML = `<span class="px-3 py-px text-[10px] font-extrabold bg-pink-500 text-white rounded-xl tracking-wider">HOJE!</span>`;
+                } else if (item.diasAte <= 7) {
+                    badgeHTML = `<span class="px-3 py-px text-[10px] font-extrabold bg-orange-100 text-orange-600 rounded-xl">${item.diasAte} dias</span>`;
+                } else if (item.diasAte <= 30) {
+                    badgeHTML = `<span class="px-3 py-px text-[10px] font-extrabold bg-yellow-100 text-yellow-700 rounded-xl">${item.diasAte} dias</span>`;
+                } else {
+                    badgeHTML = `<span class="px-3 py-px text-[10px] font-extrabold bg-gray-100 text-gray-600 rounded-xl">${item.diasAte} dias</span>`;
+                }
+                
+                card.innerHTML = `
+                    <div class="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-pink-100 to-purple-100 rounded-2xl flex items-center justify-center text-3xl shadow-inner">
+                        🎂
+                    </div>
+                    
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center justify-between">
+                            <span class="font-extrabold text-xl text-gray-800 group-hover:text-pink-600 transition-colors">${item.nome}</span>
+                        </div>
+                        <div class="flex items-center justify-between mt-px">
+                            <span class="text-sm font-semibold text-gray-500">${item.dia} de ${meses[item.mes - 1]}</span>
+                            <div>${badgeHTML}</div>
+                        </div>
+                    </div>
+                `;
+                
+                card.onclick = () => {
+                    currentMonth = item.mes - 1;
+                    currentYear = item.proximaData.getFullYear();
+                    renderCalendar();
+                    
+                    setTimeout(() => {
+                        document.getElementById('calendarGrid').scrollIntoView({ 
+                            behavior: 'smooth', 
+                            block: 'center' 
+                        });
+                    }, 180);
+                };
+                
+                container.appendChild(card);
+            });
+        }
+
+        // Render Próximo card (always visible)
+        function renderProximoCard() {
+            const container = document.getElementById('proximoContent');
+            const proximo = getProximoAniversario();
+            
+            if (!proximo) {
+                container.innerHTML = `<p class="text-gray-400">Nenhum aniversário encontrado.</p>`;
+                return;
+            }
+            
+            const isToday = proximo.dias === 0;
+            const dataStr = `${proximo.dia} de ${meses[proximo.mes - 1]}`;
+            
+            if (isToday) {
+                container.innerHTML = `
+                    <div>
+                        <div class="text-sm text-pink-500 font-bold tracking-widest mb-px">HOJE É O DIA!</div>
+                        <div class="font-extrabold text-5xl leading-none text-pink-600 mb-1">${proximo.nome}</div>
+                        <div class="text-xl text-gray-600">${dataStr}</div>
+                        
+                        <button onclick="playParabens()" class="mt-6 w-full py-3 text-sm font-extrabold bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-2xl flex items-center justify-center gap-x-2 active:scale-[0.985]">
+                            <i class="fa-solid fa-play"></i> 
+                            <span>TOCAR PARABÉNS AGORA</span>
+                        </button>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = `
+                    <div>
+                        <div class="font-extrabold text-4xl leading-none text-purple-600 mb-1">${proximo.nome}</div>
+                        <div class="text-xl font-semibold text-gray-700">${dataStr}</div>
+                        
+                        <div class="mt-4 inline-flex items-center px-4 py-2 rounded-2xl bg-pink-50 text-pink-600">
+                            <i class="fa-solid fa-clock mr-2"></i>
+                            <span class="font-extrabold">Faltam ${proximo.dias} dias</span>
+                        </div>
+                        
+                        <button onclick="goToNextBirthday()" 
+                                class="mt-5 w-full py-[13px] text-sm font-extrabold border border-purple-200 hover:bg-purple-50 text-purple-700 rounded-2xl flex items-center justify-center gap-x-2 active:scale-[0.985] transition-colors">
+                            <span>IR PARA O CALENDÁRIO</span>
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        // Show day modal (when clicking birthday in calendar)
+        let currentDayModalData = null;
+        
+        function showDayModal(dia, mes, nomes) {
+            const modal = document.getElementById('dayModal');
+            const namesContainer = document.getElementById('modalNames');
+            const dateEl = document.getElementById('modalDate');
+            
+            currentDayModalData = { dia, mes, nomes };
+            
+            dateEl.innerHTML = `${dia} de ${meses[mes - 1]}`;
+            
+            let html = '';
+            nomes.forEach(nome => {
+                html += `
+                    <div class="mb-4 last:mb-0">
+                        <div class="flex justify-center mb-2">
+                            <div class="w-20 h-20 bg-gradient-to-br from-pink-400 to-purple-500 rounded-full flex items-center justify-center shadow-inner">
+                                <span class="text-white text-6xl">🎂</span>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <div class="font-extrabold text-3xl text-gray-800">${nome}</div>
+                            <div class="text-pink-500 font-semibold mt-px">Feliz Aniversário!</div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            namesContainer.innerHTML = html;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+        
+        function closeDayModal() {
+            const modal = document.getElementById('dayModal');
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+        }
+
+        // YouTube Player
+        function playParabens() {
+            const modal = document.getElementById('playerModal');
+            const iframe = document.getElementById('youtubeFrame');
+            
+            // Open modal first
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            
+            // Set src with small delay to improve autoplay reliability across browsers
+            setTimeout(() => {
+                iframe.src = `https://www.youtube.com/embed/P52crWWUnOw?autoplay=1&modestbranding=1&rel=0&showinfo=0&playsinline=1`;
+            }, 150);
+        }
+        
+        function playParabensFromModal() {
+            closeDayModal();
+            setTimeout(() => {
+                playParabens();
+            }, 180);
+        }
+        
+        function closePlayerModal() {
+            const modal = document.getElementById('playerModal');
+            const iframe = document.getElementById('youtubeFrame');
+            
+            iframe.src = ''; // Stop video
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+        }
+
+        // Confetti
+        function launchConfetti() {
+            const colors = ['#ec4899', '#c026d3', '#f59e0b', '#3b82f6', '#eab308'];
+            const emojis = ['🎉', '🎈', '🎂', '🥳', '✨', '🎁'];
+            
+            for (let i = 0; i < 120; i++) {
+                setTimeout(() => {
+                    const confetto = document.createElement('div');
+                    confetto.className = 'confetto';
+                    confetto.style.left = Math.random() * window.innerWidth + 'px';
+                    confetto.style.top = '-30px';
+                    confetto.style.fontSize = (Math.random() * 18 + 18) + 'px';
+                    confetto.style.opacity = Math.random() * 0.7 + 0.6;
+                    
+                    const isEmoji = Math.random() > 0.35;
+                    if (isEmoji) {
+                        confetto.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
+                    } else {
+                        confetto.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                        confetto.style.width = '9px';
+                        confetto.style.height = '9px';
+                        confetto.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+                    }
+                    
+                    document.body.appendChild(confetto);
+                    
+                    const duration = Math.random() * 2800 + 3800;
+                    const angle = Math.random() * 70 + 20;
+                    
+                    confetto.animate([
+                        { 
+                            transform: `translateY(0) rotate(0deg)`,
+                            opacity: confetto.style.opacity 
+                        },
+                        { 
+                            transform: `translateY(${window.innerHeight + 120}px) rotate(${angle * (Math.random() > 0.5 ? 1 : -1)}deg)`,
+                            opacity: 0 
+                        }
+                    ], {
+                        duration: duration,
+                        easing: 'cubic-bezier(0.25, 0.1, 0.25, 1)'
+                    }).onfinish = () => {
+                        confetto.remove();
+                    };
+                }, i * 1.1);
+            }
+        }
+
+        // Main initialization
+        function init() {
+            initTailwind();
+            
+            // Set current date
+            renderCurrentDate();
+            
+            // Render dynamic status
+            renderStatus();
+            
+            // Render calendar for current month
+            renderCalendar();
+            
+            // Render list of all
+            renderListaAniversariantes();
+            
+            // Render next card
+            renderProximoCard();
+            
+            // Keyboard support
+            document.addEventListener('keydown', function(e) {
+                if (e.key === "Escape") {
+                    const player = document.getElementById('playerModal');
+                    const day = document.getElementById('dayModal');
+                    
+                    if (!player.classList.contains('hidden')) {
+                        closePlayerModal();
+                    } else if (!day.classList.contains('hidden')) {
+                        closeDayModal();
+                    }
+                }
+                
+                if (e.key.toLowerCase() === "?" && document.activeElement.tagName === "BODY") {
+                    e.preventDefault();
+                    const proximo = getProximoAniversario();
+                    if (proximo) {
+                        currentMonth = proximo.mes - 1;
+                        currentYear = proximo.data.getFullYear();
+                        renderCalendar();
+                    }
+                }
+            });
+            
+            // Easter egg: press "x" for confetti
+            let xCount = 0;
+            document.addEventListener('keypress', function(e) {
+                if (e.key.toLowerCase() === 'x') {
+                    xCount++;
+                    if (xCount >= 3) {
+                        launchConfetti();
+                        xCount = 0;
+                    }
+                }
+            });
+            
+            // Welcome toast on first load (only if not birthday)
+            const hoje = new Date();
+            const isBirthdayToday = getAniversariantesDoDia(hoje.getDate(), hoje.getMonth() + 1).length > 0;
+            
+            if (!isBirthdayToday) {
+                setTimeout(() => {
+                    // Subtle tip
+                    console.log('%c[Dica] Pressione "x" três vezes para soltar confete 🎉', 'color:#f9a8d4');
+                }, 5200);
+            }
+            
+            // Make sure everything is responsive and nice
+            console.log('%c[Aniversariantes] Página carregada com sucesso!', 'color:#c026d3');
+        }
+        
+        // Boot app
+        window.onload = init;
+    </script>
+</body>
+</html>
