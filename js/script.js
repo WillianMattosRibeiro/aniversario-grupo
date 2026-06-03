@@ -16,7 +16,6 @@ function initTailwind() {
 }
 
 const aniversariantes = [
-    { nome: "Xablau", dia: 3, mes: 6 },
     { nome: "Isis", dia: 7, mes: 2 },
     { nome: "Rafael", dia: 19, mes: 2 },
     { nome: "Dudu", dia: 13, mes: 3 },
