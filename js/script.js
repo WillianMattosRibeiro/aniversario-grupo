@@ -162,8 +162,11 @@ function renderStatus() {
         `;
         setTimeout(() => launchConfetti(), 900);
         setTimeout(() => openCelebrationModal(), 1600);
+        
     } else {
+        // === NÃO É DIA DE ANIVERSÁRIO ===
         const dataFormatada = `${proximo.dia} de ${meses[proximo.mes - 1]}`;
+        
         container.innerHTML = `
             <div class="bg-white border border-pink-100 rounded-3xl p-8 md:p-9 shadow-xl modern-shadow">
                 <div class="flex flex-col lg:flex-row lg:items-center gap-8">
@@ -171,8 +174,14 @@ function renderStatus() {
                         <div class="flex items-center gap-x-2 mb-3">
                             <span class="px-4 py-1 text-xs font-extrabold tracking-widest bg-yellow-100 text-yellow-600 rounded-2xl">HOJE • ${new Date().toLocaleDateString('pt-BR', {day: 'numeric', month: 'long'})}</span>
                         </div>
+                        
                         <h2 class="text-4xl font-extrabold text-gray-800 tracking-tight">Nenhum aniversário hoje</h2>
-                        <div class="mt-4">
+                        
+                        <div class="mt-6 flex justify-center">
+                            <img src="assets/mr-bean-waiting.gif" alt="Mr. Bean esperando" class="w-48 md:w-56 rounded-2xl shadow-lg">
+                        </div>
+                        
+                        <div class="mt-6">
                             <div class="text-xl text-gray-600">O próximo aniversário é de</div>
                             <div class="mt-1 flex items-baseline gap-x-3">
                                 <span class="font-extrabold text-4xl text-purple-600">${proximo.nome}</span>
@@ -180,11 +189,13 @@ function renderStatus() {
                             <div class="mt-1 flex items-center gap-x-2 text-lg">
                                 <span class="font-semibold text-gray-700">${dataFormatada}</span>
                                 <span class="inline-flex items-center px-3.5 py-px rounded-2xl text-sm font-bold bg-pink-100 text-pink-600">
-                                    <i class="fa-solid fa-clock mr-1.5 text-xs"></i> Faltam ${proximo.dias} dias
+                                    <i class="fa-solid fa-clock mr-1.5 text-xs"></i> 
+                                    Faltam ${proximo.dias} dias
                                 </span>
                             </div>
                         </div>
                     </div>
+                    
                     <div class="flex-shrink-0">
                         <button onclick="goToNextBirthday()" class="w-full lg:w-auto group px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 transition-all active:scale-[0.985] text-white font-extrabold rounded-2xl flex items-center justify-center gap-x-3 shadow-xl text-base">
                             <span>Ver no Calendário</span>
@@ -194,7 +205,11 @@ function renderStatus() {
                 </div>
             </div>
         `;
-        setTimeout(() => startBackgroundMusic(), 800);
+        
+        // Inicia música do grilo automaticamente
+        setTimeout(() => {
+            startBackgroundMusic();
+        }, 1200);
     }
 }
 
@@ -392,7 +407,7 @@ function closeDayModal() {
     modal.classList.add('hidden');
 }
 
-// ====================== VIDEO PLAYER (LOCAL + AUTOPLAY) ======================
+// ====================== VIDEO PLAYER ======================
 
 let currentVideoSrc = '';
 let currentAniversariante = '';
@@ -422,23 +437,19 @@ function openCelebrationModal() {
     modal.classList.remove('hidden');
     modal.classList.add('flex');
 
-    // Tenta iniciar com som no máximo
+    // Tenta iniciar com som
     setTimeout(() => {
-        videoEl.volume = 1;           // Volume máximo
+        videoEl.volume = 1;
         videoEl.muted = false;
 
         videoEl.play()
             .then(() => {
-                // Sucesso! Vídeo tocando com som
                 console.log('%c[Video] Iniciado com som', 'color:#22c55e');
             })
             .catch(() => {
-                // Navegador bloqueou som → toca mudo + oferece botão para ligar som
                 console.log('%c[Video] Autoplay com som bloqueado. Tocando mudo...', 'color:#eab308');
                 videoEl.muted = true;
                 videoEl.play();
-
-                // Cria botão "Ligar som" se não existir
                 showUnmuteButton(videoEl);
             });
     }, 400);
@@ -453,16 +464,43 @@ function closePlayerModal() {
     modal.classList.add('hidden');
 }
 
-// ====================== MÚSICA DE FUNDO ======================
+function showUnmuteButton(videoEl) {
+    const oldBtn = document.getElementById('unmuteBtn');
+    if (oldBtn) oldBtn.remove();
+
+    const btn = document.createElement('button');
+    btn.id = 'unmuteBtn';
+    btn.className = 'absolute bottom-4 right-4 z-50 flex items-center gap-x-2 px-4 py-2 bg-white/90 hover:bg-white text-pink-600 font-bold text-sm rounded-2xl shadow-lg active:scale-95 transition-all';
+    btn.innerHTML = `<i class="fa-solid fa-volume-up mr-2"></i> <span>Ligar som</span>`;
+    
+    btn.onclick = () => {
+        videoEl.muted = false;
+        videoEl.volume = 1;
+        btn.remove();
+    };
+
+    const videoContainer = videoEl.parentElement;
+    videoContainer.style.position = 'relative';
+    videoContainer.appendChild(btn);
+}
+
+// ====================== MÚSICA DE FUNDO (GRILO) ======================
 
 let backgroundAudio = null;
 
 function startBackgroundMusic() {
     if (backgroundAudio) return;
+
     backgroundAudio = new Audio('assets/grilo.mp3');
     backgroundAudio.loop = true;
-    backgroundAudio.volume = 0.45;
-    backgroundAudio.play().catch(() => {});
+    backgroundAudio.volume = 0.5;
+
+    const playPromise = backgroundAudio.play();
+    if (playPromise !== undefined) {
+        playPromise.catch(() => {
+            console.log('%c[Music] Autoplay bloqueado pelo navegador.', 'color:#eab308');
+        });
+    }
 }
 
 function stopBackgroundMusic() {
@@ -505,28 +543,6 @@ function launchConfetti() {
             ], { duration, easing: 'cubic-bezier(0.25, 0.1, 0.25, 1)' }).onfinish = () => confetto.remove();
         }, i * 1.1);
     }
-}
-
-function showUnmuteButton(videoEl) {
-    // Remove botão anterior se existir
-    const oldBtn = document.getElementById('unmuteBtn');
-    if (oldBtn) oldBtn.remove();
-
-    const btn = document.createElement('button');
-    btn.id = 'unmuteBtn';
-    btn.className = 'absolute bottom-4 right-4 z-50 flex items-center gap-x-2 px-4 py-2 bg-white/90 hover:bg-white text-pink-600 font-bold text-sm rounded-2xl shadow-lg active:scale-95 transition-all';
-    btn.innerHTML = `<i class="fa-solid fa-volume-up mr-2"></i> <span>Ligar som</span>`;
-    
-    btn.onclick = () => {
-        videoEl.muted = false;
-        videoEl.volume = 1;
-        btn.remove();
-    };
-
-    // Adiciona o botão dentro do container do vídeo
-    const videoContainer = videoEl.parentElement;
-    videoContainer.style.position = 'relative';
-    videoContainer.appendChild(btn);
 }
 
 // ====================== INICIALIZAÇÃO ======================

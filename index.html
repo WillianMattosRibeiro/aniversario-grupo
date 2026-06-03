@@ -5,16 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🎂 Aniversariantes do Grupo de Whatsapp</title>
     
-    <!-- Tailwind via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
-    <!-- Nosso CSS -->
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="bg-gradient-to-br from-pink-50 via-purple-50 to-yellow-50 min-h-screen">
+    
     <!-- HEADER -->
     <nav class="bg-white/90 backdrop-blur-xl border-b border-pink-100 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
@@ -73,7 +69,6 @@
                 </div>
             </div>
 
-            <!-- Calendar -->
             <div class="bg-white rounded-3xl shadow-xl border border-pink-100 p-6 md:p-8 modern-shadow">
                 <div class="grid grid-cols-7 gap-2 mb-3 px-2">
                     <div class="text-center text-xs font-bold text-pink-400/90 tracking-widest py-1">DOM</div>
@@ -84,7 +79,6 @@
                     <div class="text-center text-xs font-bold text-pink-400/90 tracking-widest py-1">SEX</div>
                     <div class="text-center text-xs font-bold text-pink-400/90 tracking-widest py-1">SÁB</div>
                 </div>
-                
                 <div id="calendarGrid" class="grid grid-cols-7 gap-2"></div>
             </div>
         </div>
@@ -159,7 +153,7 @@
             </div>
             
             <div class="bg-black aspect-video">
-                <video id="celebrationVideo" class="w-full h-full" controls autoplay playsinline muted></video>
+                <video id="celebrationVideo" class="w-full h-full" controls autoplay playsinline></video>
             </div>
             
             <div class="px-6 py-4 bg-gray-50 flex items-center justify-center gap-x-2 text-sm">
@@ -171,11 +165,6 @@
         </div>
     </div>
 
-    <footer class="text-center py-8 text-xs text-gray-400">
-        Feito com <span class="text-pink-400">❤️</span> para o Grupo dos Casais • Inspire-se e celebre cada dia especial
-    </footer>
-
-    <!-- Nosso JavaScript -->
     <script src="js/script.js"></script>
 </body>
 </html>
