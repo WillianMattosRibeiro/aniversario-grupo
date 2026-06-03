@@ -3,15 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎂 Aniversariantes do Grupo dos Casais • Parabéns da Xuxa</title>
+    <title>🎂 Aniversariantes do Grupo dos Casais • Parabéns</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&amp;family=Inter:wght@400;500;600&amp;display=swap');
-        
-        :root {
-            --primary: #ec4899;
-        }
         
         body {
             font-family: 'Inter', system_ui, sans-serif;
@@ -49,7 +45,6 @@
             pointer-events: none;
             user-select: none;
             font-size: 1.5rem;
-            animation: confetti-fall linear forwards;
         }
 
         .section-title {
@@ -116,14 +111,6 @@
                     <i class="fa-regular fa-calendar text-pink-500 mr-2"></i>
                     <span id="currentDateHeader" class="text-sm font-semibold text-gray-700"></span>
                 </div>
-                
-                <!-- Music Button -->
-                <button onclick="playParabens()" 
-                        class="group flex items-center gap-x-2.5 px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-semibold text-sm rounded-2xl shadow-lg hover:shadow-xl active:scale-[0.985] transition-all">
-                    <i class="fa-solid fa-music group-hover:scale-110 transition-transform"></i>
-                    <span class="hidden sm:inline">Tocar Parabéns da Xuxa</span>
-                    <span class="sm:hidden">🎵</span>
-                </button>
             </div>
         </div>
     </nav>
@@ -248,10 +235,10 @@
                 </div>
                 
                 <div class="mt-6 flex justify-center">
-                    <button onclick="playParabensFromModal()" 
+                    <button onclick="openCelebrationModal()" 
                             class="flex items-center justify-center gap-x-3 px-8 py-3.5 bg-gradient-to-r from-pink-500 to-purple-600 hover:brightness-105 text-white font-bold rounded-2xl shadow-lg active:scale-[0.985] transition-all text-sm">
                         <i class="fa-solid fa-play mr-1"></i> 
-                        <span>TOCAR PARABÉNS DA XUXA</span>
+                        <span>TOCAR PARABÉNS</span>
                     </button>
                 </div>
             </div>
@@ -266,8 +253,8 @@
                 <div class="flex items-center gap-x-3">
                     <i class="fa-solid fa-music text-2xl"></i>
                     <div>
-                        <div class="font-extrabold text-xl tracking-tight">Parabéns da Xuxa</div>
-                        <div class="text-pink-200 text-xs -mt-0.5">Xou da Xuxa • 1986</div>
+                        <div class="font-extrabold text-xl tracking-tight">Parabéns!</div>
+                        <div class="text-pink-200 text-xs -mt-0.5">Música especial de aniversário</div>
                     </div>
                 </div>
                 <button onclick="closePlayerModal()" class="text-white/70 hover:text-white text-3xl leading-none w-9 h-9 flex items-center justify-center">&times;</button>
@@ -284,21 +271,19 @@
             <div class="px-6 py-4 bg-gray-50 flex items-center justify-center gap-x-2 text-sm">
                 <div class="flex items-center text-pink-600">
                     <i class="fa-solid fa-heart mr-1.5"></i>
-                    <span class="font-medium">Cante junto com a Xuxa!</span>
+                    <span class="font-medium">Celebre esse momento especial!</span>
                 </div>
             </div>
         </div>
     </div>
 
     <footer class="text-center py-8 text-xs text-gray-400">
-        Feito com <span class="text-pink-400">❤️</span> para a turma • Inspire-se e celebre cada dia especial
+        Feito com <span class="text-pink-400">❤️</span> para o Grupo dos Casais • Inspire-se e celebre cada dia especial
     </footer>
 
     <script>
         // Tailwind script
         function initTailwind() {
-            document.documentElement.style.setProperty('--accent', '#ec4899');
-            
             tailwind.config = {
                 theme: {
                     extend: {
@@ -339,11 +324,13 @@
 
         const meses = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", 
                        "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
-        
-        const mesesAbrev = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
 
         let currentYear = new Date().getFullYear();
-        let currentMonth = new Date().getMonth(); // 0-11
+        let currentMonth = new Date().getMonth();
+
+        // Novos vídeos otimizados para GitHub Pages
+        const VIDEO_CELEBRATION = 'wSGoUSwNb44'; // Auto abre no pop-up quando é aniversário
+        const VIDEO_AMBIENT = 'iiRiflq90ug';     // Toca em loop (com botão "TOCAR") quando NÃO é aniversário
 
         // Helpers
         function getAniversariantesDoDia(dia, mes) {
@@ -373,7 +360,6 @@
                 }
             });
             
-            // If today is birthday, return with 0 days
             const hojeAniv = getAniversariantesDoDia(hoje.getDate(), hoje.getMonth() + 1);
             if (hojeAniv.length > 0) {
                 return { 
@@ -429,7 +415,6 @@
                 const nomes = aniversHoje.join(" e ");
                 container.innerHTML = `
                     <div class="relative bg-gradient-to-br from-pink-500 via-purple-600 to-yellow-400 text-white rounded-3xl p-9 md:p-12 shadow-2xl overflow-hidden">
-                        <!-- Decorative elements -->
                         <div class="absolute inset-0 bg-[radial-gradient(#ffffff15_0.8px,transparent_1px)] bg-[length:5px_5px]"></div>
                         <div class="absolute top-6 right-8 text-[120px] opacity-10">🎉</div>
                         <div class="absolute bottom-4 left-6 text-[90px] opacity-10">🎈</div>
@@ -447,10 +432,10 @@
                             <p class="text-3xl md:text-4xl font-semibold mb-7 tracking-tight">${nomes}</p>
                             
                             <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                                <button onclick="playParabens()" 
+                                <button onclick="openCelebrationModal()" 
                                         class="group px-9 py-4 bg-white text-pink-600 hover:bg-yellow-100 font-extrabold text-xl rounded-2xl flex items-center justify-center gap-x-3 shadow-xl active:scale-[0.985] transition-all">
                                     <i class="fa-solid fa-play text-lg group-hover:scale-125 transition-transform"></i>
-                                    <span>TOCAR PARABÉNS DA XUXA</span>
+                                    <span>TOCAR PARABÉNS</span>
                                 </button>
                                 
                                 <button onclick="launchConfetti()" 
@@ -460,15 +445,19 @@
                                 </button>
                             </div>
                             
-                            <p class="mt-6 text-white/75 text-sm">Clique no botão e cante junto com a Xuxa! 🎤</p>
+                            <p class="mt-6 text-white/75 text-sm">Aproveite o momento especial! 🎤</p>
                         </div>
                     </div>
                 `;
                 
-                // Auto launch confetti on birthday
+                // Auto launch confetti + abrir modal automaticamente
                 setTimeout(() => {
                     launchConfetti();
                 }, 900);
+                
+                setTimeout(() => {
+                    openCelebrationModal();
+                }, 1600);
                 
             } else {
                 // NORMAL MODE
@@ -509,6 +498,11 @@
                         </div>
                     </div>
                 `;
+                
+                // Inicia automaticamente a música ambiente (otimizado para GitHub Pages)
+                setTimeout(() => {
+                    startAmbientMusic();
+                }, 800);
             }
         }
 
@@ -524,14 +518,12 @@
             const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
             const today = new Date();
             
-            // Empty days before month starts
             for (let i = 0; i < firstDay; i++) {
                 const emptyCell = document.createElement('div');
                 emptyCell.className = `h-16 md:h-[88px] bg-gray-50/70 border border-gray-100 rounded-2xl`;
                 grid.appendChild(emptyCell);
             }
             
-            // Days of the month
             for (let d = 1; d <= daysInMonth; d++) {
                 const dayEl = document.createElement('div');
                 
@@ -566,25 +558,13 @@
                             </div>
                         </div>
                     `;
-                    
                     dayEl.onclick = () => showDayModal(d, currentMonth + 1, anivers);
-                    
                 } else {
                     dayEl.innerHTML = `
                         <div class="text-center">
                             <div class="day-number ${isToday ? 'text-yellow-600' : 'text-gray-700'}">${d}</div>
                         </div>
                     `;
-                    
-                    if (isToday) {
-                        dayEl.onclick = () => {
-                            const toast = document.createElement('div');
-                            toast.className = `fixed bottom-6 left-1/2 -translate-x-1/2 bg-yellow-400 text-yellow-900 px-5 py-2 rounded-2xl text-sm font-bold shadow-xl flex items-center gap-x-2 z-[200]`;
-                            toast.innerHTML = `<span>Hoje é dia ${d} de ${meses[currentMonth]}!</span>`;
-                            document.body.appendChild(toast);
-                            setTimeout(() => toast.remove(), 2200);
-                        };
-                    }
                 }
                 
                 grid.appendChild(dayEl);
@@ -624,25 +604,8 @@
             currentYear = proximo.data.getFullYear();
             renderCalendar();
             
-            // Scroll to calendar
             setTimeout(() => {
-                const cal = document.getElementById('calendarGrid');
-                cal.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                
-                // Briefly highlight the day
-                setTimeout(() => {
-                    const days = document.querySelectorAll('#calendarGrid > div');
-                    days.forEach(day => {
-                        if (day.textContent.includes(proximo.nome) || 
-                            (proximo.dias === 0 && day.textContent.includes(proximo.dia))) {
-                            day.style.transitionDuration = '80ms';
-                            day.style.boxShadow = '0 0 0 4px rgb(236 72 153 / 0.6)';
-                            setTimeout(() => {
-                                day.style.boxShadow = '';
-                            }, 1400);
-                        }
-                    });
-                }, 650);
+                document.getElementById('calendarGrid').scrollIntoView({ behavior: 'smooth', block: 'center' });
             }, 300);
         }
 
@@ -692,10 +655,7 @@
                     renderCalendar();
                     
                     setTimeout(() => {
-                        document.getElementById('calendarGrid').scrollIntoView({ 
-                            behavior: 'smooth', 
-                            block: 'center' 
-                        });
+                        document.getElementById('calendarGrid').scrollIntoView({ behavior: 'smooth', block: 'center' });
                     }, 180);
                 };
                 
@@ -703,7 +663,7 @@
             });
         }
 
-        // Render Próximo card (always visible)
+        // Render Próximo card
         function renderProximoCard() {
             const container = document.getElementById('proximoContent');
             const proximo = getProximoAniversario();
@@ -723,7 +683,7 @@
                         <div class="font-extrabold text-5xl leading-none text-pink-600 mb-1">${proximo.nome}</div>
                         <div class="text-xl text-gray-600">${dataStr}</div>
                         
-                        <button onclick="playParabens()" class="mt-6 w-full py-3 text-sm font-extrabold bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-2xl flex items-center justify-center gap-x-2 active:scale-[0.985]">
+                        <button onclick="openCelebrationModal()" class="mt-6 w-full py-3 text-sm font-extrabold bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-2xl flex items-center justify-center gap-x-2 active:scale-[0.985]">
                             <i class="fa-solid fa-play"></i> 
                             <span>TOCAR PARABÉNS AGORA</span>
                         </button>
@@ -749,15 +709,11 @@
             }
         }
 
-        // Show day modal (when clicking birthday in calendar)
-        let currentDayModalData = null;
-        
+        // Show day modal
         function showDayModal(dia, mes, nomes) {
             const modal = document.getElementById('dayModal');
             const namesContainer = document.getElementById('modalNames');
             const dateEl = document.getElementById('modalDate');
-            
-            currentDayModalData = { dia, mes, nomes };
             
             dateEl.innerHTML = `${dia} de ${meses[mes - 1]}`;
             
@@ -789,33 +745,94 @@
             modal.classList.add('hidden');
         }
 
-        // YouTube Player
-        function playParabens() {
+        // YouTube Player functions - Otimizados
+        function openCelebrationModal() {
             const modal = document.getElementById('playerModal');
             const iframe = document.getElementById('youtubeFrame');
             
-            // Open modal first
             modal.classList.remove('hidden');
             modal.classList.add('flex');
             
-            // Set src with small delay to improve autoplay reliability across browsers
             setTimeout(() => {
-                iframe.src = `https://www.youtube.com/embed/P52crWWUnOw?autoplay=1&modestbranding=1&rel=0&showinfo=0&playsinline=1`;
-            }, 150);
+                iframe.src = `https://www.youtube.com/embed/${VIDEO_CELEBRATION}?autoplay=1&mute=0&modestbranding=1&rel=0&showinfo=0&playsinline=1&loop=1&playlist=${VIDEO_CELEBRATION}`;
+            }, 120);
         }
         
-        function playParabensFromModal() {
-            closeDayModal();
-            setTimeout(() => {
-                playParabens();
-            }, 180);
+        function startAmbientMusic() {
+            let ambientDiv = document.getElementById('ambientMusicPlayer');
+            
+            if (!ambientDiv) {
+                ambientDiv = document.createElement('div');
+                ambientDiv.id = 'ambientMusicPlayer';
+                ambientDiv.className = `fixed bottom-4 right-4 z-[95] bg-white shadow-2xl border border-pink-200 rounded-3xl px-5 py-3 flex items-center gap-x-4 text-sm`;
+                ambientDiv.innerHTML = `
+                    <div class="flex items-center gap-x-3">
+                        <i class="fa-solid fa-music text-xl text-pink-500"></i>
+                        <div class="leading-tight">
+                            <div class="font-bold text-gray-700 text-sm">Música Ambiente</div>
+                            <div class="text-[10px] text-gray-500">Toque para iniciar • Loop ativo</div>
+                        </div>
+                    </div>
+                    
+                    <button id="ambientPlayBtn"
+                            onclick="startAmbientPlayback(this)"
+                            class="px-5 py-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white text-xs font-extrabold rounded-2xl flex items-center gap-x-2 active:scale-[0.985] shadow-md">
+                        <i class="fa-solid fa-play mr-1"></i> 
+                        <span>TOCAR</span>
+                    </button>
+                    
+                    <button onclick="stopAmbientMusic()" 
+                            class="text-gray-400 hover:text-gray-600 px-2 text-lg leading-none">×</button>
+                `;
+                document.body.appendChild(ambientDiv);
+            } else {
+                ambientDiv.style.display = 'flex';
+            }
+            
+            let ambientIframe = document.getElementById('ambientIframe');
+            if (!ambientIframe) {
+                ambientIframe = document.createElement('iframe');
+                ambientIframe.id = 'ambientIframe';
+                ambientIframe.style.cssText = 'position:absolute; left:-9999px; width:1px; height:1px; opacity:0; pointer-events:none;';
+                ambientIframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+                document.body.appendChild(ambientIframe);
+                window.ambientIframeEl = ambientIframe;
+            }
+            
+            // Tenta autoplay muted (melhor chance no GitHub Pages)
+            ambientIframe.src = `https://www.youtube.com/embed/${VIDEO_AMBIENT}?autoplay=1&mute=1&modestbranding=1&rel=0&showinfo=0&playsinline=1&loop=1&playlist=${VIDEO_AMBIENT}`;
+            window.ambientPlaying = false;
+        }
+        
+        function startAmbientPlayback(btn) {
+            const iframe = window.ambientIframeEl;
+            if (!iframe) return;
+            
+            iframe.src = `https://www.youtube.com/embed/${VIDEO_AMBIENT}?autoplay=1&mute=0&modestbranding=1&rel=0&showinfo=0&playsinline=1&loop=1&playlist=${VIDEO_AMBIENT}`;
+            window.ambientPlaying = true;
+            
+            btn.outerHTML = `
+                <div class="flex items-center gap-x-2 px-4 py-1.5 bg-emerald-100 text-emerald-600 rounded-2xl text-xs font-bold">
+                    <i class="fa-solid fa-volume-up"></i>
+                    <span>TOCANDO</span>
+                </div>
+            `;
+        }
+        
+        function stopAmbientMusic() {
+            const iframe = window.ambientIframeEl;
+            const player = document.getElementById('ambientMusicPlayer');
+            
+            if (iframe) iframe.src = '';
+            if (player) player.style.display = 'none';
+            window.ambientPlaying = false;
         }
         
         function closePlayerModal() {
             const modal = document.getElementById('playerModal');
             const iframe = document.getElementById('youtubeFrame');
             
-            iframe.src = ''; // Stop video
+            iframe.src = '';
             modal.classList.remove('flex');
             modal.classList.add('hidden');
         }
@@ -850,20 +867,12 @@
                     const angle = Math.random() * 70 + 20;
                     
                     confetto.animate([
-                        { 
-                            transform: `translateY(0) rotate(0deg)`,
-                            opacity: confetto.style.opacity 
-                        },
-                        { 
-                            transform: `translateY(${window.innerHeight + 120}px) rotate(${angle * (Math.random() > 0.5 ? 1 : -1)}deg)`,
-                            opacity: 0 
-                        }
+                        { transform: `translateY(0) rotate(0deg)`, opacity: confetto.style.opacity },
+                        { transform: `translateY(${window.innerHeight + 120}px) rotate(${angle * (Math.random() > 0.5 ? 1 : -1)}deg)`, opacity: 0 }
                     ], {
                         duration: duration,
                         easing: 'cubic-bezier(0.25, 0.1, 0.25, 1)'
-                    }).onfinish = () => {
-                        confetto.remove();
-                    };
+                    }).onfinish = () => confetto.remove();
                 }, i * 1.1);
             }
         }
@@ -871,20 +880,10 @@
         // Main initialization
         function init() {
             initTailwind();
-            
-            // Set current date
             renderCurrentDate();
-            
-            // Render dynamic status
             renderStatus();
-            
-            // Render calendar for current month
             renderCalendar();
-            
-            // Render list of all
             renderListaAniversariantes();
-            
-            // Render next card
             renderProximoCard();
             
             // Keyboard support
@@ -899,46 +898,11 @@
                         closeDayModal();
                     }
                 }
-                
-                if (e.key.toLowerCase() === "?" && document.activeElement.tagName === "BODY") {
-                    e.preventDefault();
-                    const proximo = getProximoAniversario();
-                    if (proximo) {
-                        currentMonth = proximo.mes - 1;
-                        currentYear = proximo.data.getFullYear();
-                        renderCalendar();
-                    }
-                }
             });
             
-            // Easter egg: press "x" for confetti
-            let xCount = 0;
-            document.addEventListener('keypress', function(e) {
-                if (e.key.toLowerCase() === 'x') {
-                    xCount++;
-                    if (xCount >= 3) {
-                        launchConfetti();
-                        xCount = 0;
-                    }
-                }
-            });
-            
-            // Welcome toast on first load (only if not birthday)
-            const hoje = new Date();
-            const isBirthdayToday = getAniversariantesDoDia(hoje.getDate(), hoje.getMonth() + 1).length > 0;
-            
-            if (!isBirthdayToday) {
-                setTimeout(() => {
-                    // Subtle tip
-                    console.log('%c[Dica] Pressione "x" três vezes para soltar confete 🎉', 'color:#f9a8d4');
-                }, 5200);
-            }
-            
-            // Make sure everything is responsive and nice
-            console.log('%c[Aniversariantes] Página carregada com sucesso!', 'color:#c026d3');
+            console.log('%c[Aniversariantes] Página carregada com sucesso! (otimizada para GitHub Pages)', 'color:#c026d3');
         }
         
-        // Boot app
         window.onload = init;
     </script>
 </body>
