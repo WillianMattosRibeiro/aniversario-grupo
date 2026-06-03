@@ -1,6 +1,6 @@
 // =============================================
 // ANIVERSARIANTES DO GRUPO DOS CASAIS
-// JavaScript principal - Versão Final Corrigida
+// JavaScript principal - Versão Final
 // =============================================
 
 function initTailwind() {
@@ -178,7 +178,7 @@ function renderStatus() {
                         <h2 class="text-4xl font-extrabold text-gray-800 tracking-tight">Nenhum aniversário hoje</h2>
                         
                         <div class="mt-6 flex justify-center">
-                            <img src="assets/mr-bean-waiting.gif" alt="Mr. Bean esperando" class="w-48 md:w-56 rounded-2xl shadow-lg">
+                            <img src="assets/waiting.gif" alt="Aguardando" class="w-48 md:w-56 rounded-2xl shadow-lg">
                         </div>
                         
                         <div class="mt-6">
@@ -206,10 +206,10 @@ function renderStatus() {
             </div>
         `;
         
-        // Inicia música do grilo automaticamente
+        // Inicia o áudio automaticamente quando NÃO é dia de aniversário
         setTimeout(() => {
             startBackgroundMusic();
-        }, 1200);
+        }, 1500);
     }
 }
 
@@ -437,7 +437,6 @@ function openCelebrationModal() {
     modal.classList.remove('hidden');
     modal.classList.add('flex');
 
-    // Tenta iniciar com som
     setTimeout(() => {
         videoEl.volume = 1;
         videoEl.muted = false;
@@ -484,7 +483,7 @@ function showUnmuteButton(videoEl) {
     videoContainer.appendChild(btn);
 }
 
-// ====================== MÚSICA DE FUNDO (GRILO) ======================
+// ====================== MÚSICA DE FUNDO (grilo.mp3) ======================
 
 let backgroundAudio = null;
 
@@ -493,13 +492,19 @@ function startBackgroundMusic() {
 
     backgroundAudio = new Audio('assets/grilo.mp3');
     backgroundAudio.loop = true;
-    backgroundAudio.volume = 0.5;
+    backgroundAudio.volume = 0.55;
 
+    // Tenta tocar automaticamente
     const playPromise = backgroundAudio.play();
+
     if (playPromise !== undefined) {
-        playPromise.catch(() => {
-            console.log('%c[Music] Autoplay bloqueado pelo navegador.', 'color:#eab308');
-        });
+        playPromise
+            .then(() => {
+                console.log('%c[Audio] grilo.mp3 iniciado com sucesso', 'color:#22c55e');
+            })
+            .catch((error) => {
+                console.log('%c[Audio] Autoplay bloqueado pelo navegador. Música só tocará após interação do usuário.', 'color:#eab308');
+            });
     }
 }
 
