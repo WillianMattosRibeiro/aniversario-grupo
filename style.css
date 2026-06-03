@@ -1,0 +1,84 @@
+/* Estilos personalizados do site de Aniversariantes */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Inter:wght@400;500;600&display=swap');
+
+body {
+    font-family: 'Inter', system_ui, sans-serif;
+}
+
+.title-font {
+    font-family: 'Poppins', system_ui, sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+}
+
+.calendar-day {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.calendar-day:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+.birthday-day {
+    background: linear-gradient(135deg, #ec4899, #a855f7);
+    color: white;
+    box-shadow: 0 10px 15px -3px rgb(236 72 153 / 0.3), 0 4px 6px -4px rgb(236 72 153 / 0.3);
+}
+
+.birthday-day:hover {
+    transform: scale(1.05) !important;
+    box-shadow: 0 20px 25px -5px rgb(236 72 153 / 0.4), 0 8px 10px -6px rgb(236 72 153 / 0.4);
+}
+
+.confetto {
+    position: fixed;
+    z-index: 9999;
+    pointer-events: none;
+    user-select: none;
+    font-size: 1.5rem;
+}
+
+.section-title {
+    font-size: 1.75rem;
+    line-height: 1.1;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+}
+
+.aniversario-card {
+    transition: transform 0.2s cubic-bezier(0.4, 0.0, 0.2, 1), 
+               box-shadow 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.aniversario-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+}
+
+.modal {
+    animation: modal-pop 0.2s ease-out forwards;
+}
+
+@keyframes modal-pop {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.day-number {
+    font-size: 1.35rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.modern-shadow {
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.08), 
+               0 4px 6px -4px rgb(0 0 0 / 0.08);
+}
