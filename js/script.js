@@ -296,32 +296,44 @@ function closeDayModal() {
 // ====================== PLAYER DE VÍDEO LOCAL ======================
 
 let currentVideoSrc = '';
+let currentAniversariante = '';
 
 function openCelebrationModal() {
     const modal = document.getElementById('playerModal');
     const videoEl = document.getElementById('celebrationVideo');
-    
+    const titleEl = document.getElementById('modalPlayerTitle');
+
     const hoje = new Date();
     const diaHoje = hoje.getDate();
     const mesHoje = hoje.getMonth() + 1;
     const aniversHoje = getAniversariantesDoDia(diaHoje, mesHoje);
-    
+
     if (aniversHoje.length > 0) {
-        // Usa o vídeo da primeira pessoa (ou aleatório se múltiplos)
-        currentVideoSrc = getRandomVideoForPerson(aniversHoje[0].nome, hoje.getFullYear());
+        currentAniversariante = aniversHoje[0].nome;
+        currentVideoSrc = getRandomVideoForPerson(currentAniversariante, hoje.getFullYear());
+        titleEl.textContent = `Parabéns, ${currentAniversariante}!`;
     } else {
-        // Fallback (não deve acontecer normalmente)
+        currentAniversariante = "Amigo(a)";
         currentVideoSrc = 'assets/parabens-1.mp4';
+        titleEl.textContent = `Parabéns!`;
     }
-    
+
     videoEl.src = currentVideoSrc;
     videoEl.load();
-    
+
     modal.classList.remove('hidden');
     modal.classList.add('flex');
-    
-    // Toca automaticamente
-    videoEl.play().catch(() => {});
+
+    // Força autoplay
+    setTimeout(() => {
+        videoEl.muted = false;
+        videoEl.play().catch(err => {
+            console.log("Autoplay bloqueado:", err);
+            // Tenta novamente sem som se falhar
+            videoEl.muted = true;
+            videoEl.play();
+        });
+    }, 300);
 }
 
 function closePlayerModal() {
