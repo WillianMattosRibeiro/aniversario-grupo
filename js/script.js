@@ -48,9 +48,6 @@ const meses = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
 let currentYear = new Date().getFullYear();
 let currentMonth = new Date().getMonth();
 
-const VIDEO_CELEBRATION = 'cJSN48XquGI';
-const VIDEO_AMBIENT = 'cJSN48XquGI';
-
 function getAniversariantesDoDia(dia, mes) {
     return aniversariantes
         .filter(a => a.dia === dia && a.mes === mes)
@@ -454,47 +451,40 @@ function closeDayModal() {
 
 function openCelebrationModal() {
     const modal = document.getElementById('playerModal');
-    const iframe = document.getElementById('youtubeFrame');
     
     modal.classList.remove('hidden');
     modal.classList.add('flex');
     
-    setTimeout(() => {
-        iframe.src = `https://www.youtube.com/embed/${VIDEO_CELEBRATION}?autoplay=1&mute=0&modestbranding=1&rel=0&showinfo=0&playsinline=1&loop=1&playlist=${VIDEO_CELEBRATION}`;
-    }, 120);
+    const audio = new Audio('assets/grilo.mp3');
+    audio.volume = 0.7;
+    audio.play().catch(e => console.log('Play prevented:', e));
+    window.celebrationAudio = audio;
 }
 
 // Música de fundo automática e sem interface (apenas quando NÃO é aniversário)
 function startBackgroundMusic() {
-    // Remove qualquer iframe anterior
-    const oldIframe = document.getElementById('backgroundMusicPlayer');
-    if (oldIframe) oldIframe.remove();
-
-    const iframe = document.createElement('iframe');
-    iframe.id = 'backgroundMusicPlayer';
-    iframe.style.cssText = 'position:absolute; left:-9999px; width:1px; height:1px; opacity:0; pointer-events:none;';
-    iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-    
-    // Tenta iniciar automaticamente com som
-    iframe.src = `https://www.youtube.com/embed/${VIDEO_AMBIENT}?autoplay=1&mute=0&modestbranding=1&rel=0&showinfo=0&playsinline=1&loop=1&playlist=${VIDEO_AMBIENT}`;
-    
-    document.body.appendChild(iframe);
-    window.backgroundMusicIframe = iframe;
+    const audio = new Audio('assets/grilo.mp3');
+    audio.loop = true;
+    audio.volume = 0.5;
+    audio.play().catch(e => console.log('Autoplay prevented:', e));
+    window.backgroundMusicAudio = audio;
 }
 
 function stopBackgroundMusic() {
-    const iframe = document.getElementById('backgroundMusicPlayer');
-    if (iframe) {
-        iframe.src = '';
-        iframe.remove();
+    if (window.backgroundMusicAudio) {
+        window.backgroundMusicAudio.pause();
+        window.backgroundMusicAudio = null;
     }
 }
 
 function closePlayerModal() {
     const modal = document.getElementById('playerModal');
-    const iframe = document.getElementById('youtubeFrame');
     
-    iframe.src = '';
+    if (window.celebrationAudio) {
+        window.celebrationAudio.pause();
+        window.celebrationAudio = null;
+    }
+    
     modal.classList.remove('flex');
     modal.classList.add('hidden');
 }

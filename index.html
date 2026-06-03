@@ -143,9 +143,9 @@
         </div>
     </div>
 
-    <!-- YOUTUBE PLAYER MODAL -->
+    <!-- AUDIO PLAYER MODAL -->
     <div id="playerModal" onclick="if (event.target.id === 'playerModal') closePlayerModal()" class="hidden fixed inset-0 bg-black/70 backdrop-blur-md z-[110] flex items-center justify-center p-4">
-        <div onclick="event.stopImmediatePropagation()" class="bg-white w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden modal">
+        <div onclick="event.stopImmediatePropagation()" class="bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden modal">
             <div class="px-6 py-4 bg-gradient-to-r from-pink-600 to-purple-700 flex items-center justify-between text-white">
                 <div class="flex items-center gap-x-3">
                     <i class="fa-solid fa-music text-2xl"></i>
@@ -157,8 +157,12 @@
                 <button onclick="closePlayerModal()" class="text-white/70 hover:text-white text-3xl leading-none w-9 h-9 flex items-center justify-center">&times;</button>
             </div>
             
-            <div class="aspect-video bg-black">
-                <iframe id="youtubeFrame" width="100%" height="100%" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <div class="p-8 flex flex-col items-center bg-gradient-to-br from-pink-50 to-purple-50">
+                <div class="w-24 h-24 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center mb-4">
+                    <i class="fa-solid fa-music text-5xl text-white"></i>
+                </div>
+                <p class="text-gray-700 font-semibold text-center mb-2">Reproduzindo: "Parabéns do Grilo"</p>
+                <p class="text-pink-600 text-sm text-center">Aproveite a música! 🎵</p>
             </div>
             
             <div class="px-6 py-4 bg-gray-50 flex items-center justify-center gap-x-2 text-sm">
