@@ -1,9 +1,8 @@
 // =============================================
 // ANIVERSARIANTES DO GRUPO DOS CASAIS
-// JavaScript principal
+// JavaScript principal - Versão Final
 // =============================================
 
-// Tailwind config
 function initTailwind() {
     tailwind.config = {
         theme: {
@@ -16,7 +15,6 @@ function initTailwind() {
     };
 }
 
-// Dados dos aniversariantes
 const aniversariantes = [
     { nome: "Isis", dia: 7, mes: 2 },
     { nome: "Rafael", dia: 19, mes: 2 },
@@ -49,11 +47,9 @@ const meses = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
 let currentYear = new Date().getFullYear();
 let currentMonth = new Date().getMonth();
 
-// Vídeos (atualizados)
 const VIDEO_CELEBRATION = 'cJSN48XquGI';
 const VIDEO_AMBIENT = 'cJSN48XquGI';
 
-// Helpers
 function getAniversariantesDoDia(dia, mes) {
     return aniversariantes
         .filter(a => a.dia === dia && a.mes === mes)
@@ -111,7 +107,6 @@ function getAniversariantesOrdenados() {
     }).sort((x, y) => x.diasAte - y.diasAte);
 }
 
-// Render current date
 function renderCurrentDate() {
     const el = document.getElementById('currentDateHeader');
     const hoje = new Date();
@@ -121,7 +116,6 @@ function renderCurrentDate() {
     el.innerHTML = str;
 }
 
-// Render Status / Hero
 function renderStatus() {
     const container = document.getElementById('statusSection');
     const hoje = new Date();
@@ -132,6 +126,7 @@ function renderStatus() {
     const proximo = getProximoAniversario();
 
     if (aniversHoje.length > 0) {
+        // === DIA DE ANIVERSÁRIO ===
         const nomes = aniversHoje.join(" e ");
         container.innerHTML = `
             <div class="relative bg-gradient-to-br from-pink-500 via-purple-600 to-yellow-400 text-white rounded-3xl p-9 md:p-12 shadow-2xl overflow-hidden">
@@ -170,10 +165,12 @@ function renderStatus() {
             </div>
         `;
         
+        // Auto confete + abre o pop-up automaticamente
         setTimeout(() => launchConfetti(), 900);
         setTimeout(() => openCelebrationModal(), 1600);
         
     } else {
+        // === NÃO É DIA DE ANIVERSÁRIO ===
         const dataFormatada = `${proximo.dia} de ${meses[proximo.mes - 1]}`;
         
         container.innerHTML = `
@@ -212,11 +209,13 @@ function renderStatus() {
             </div>
         `;
         
-        setTimeout(() => startAmbientMusic(), 800);
+        // Inicia música de fundo automaticamente (sem interface)
+        setTimeout(() => {
+            startBackgroundMusic();
+        }, 600);
     }
 }
 
-// Render Calendar
 function renderCalendar() {
     const grid = document.getElementById('calendarGrid');
     grid.innerHTML = '';
@@ -317,7 +316,6 @@ function goToNextBirthday() {
     }, 300);
 }
 
-// Render full list
 function renderListaAniversariantes() {
     const container = document.getElementById('listaAniversariantes');
     container.innerHTML = '';
@@ -371,7 +369,6 @@ function renderListaAniversariantes() {
     });
 }
 
-// Render Próximo card
 function renderProximoCard() {
     const container = document.getElementById('proximoContent');
     const proximo = getProximoAniversario();
@@ -417,7 +414,6 @@ function renderProximoCard() {
     }
 }
 
-// Modals
 function showDayModal(dia, mes, nomes) {
     const modal = document.getElementById('dayModal');
     const namesContainer = document.getElementById('modalNames');
@@ -453,7 +449,8 @@ function closeDayModal() {
     modal.classList.add('hidden');
 }
 
-// YouTube functions
+// === FUNÇÕES DE VÍDEO ===
+
 function openCelebrationModal() {
     const modal = document.getElementById('playerModal');
     const iframe = document.getElementById('youtubeFrame');
@@ -466,71 +463,30 @@ function openCelebrationModal() {
     }, 120);
 }
 
-function startAmbientMusic() {
-    let ambientDiv = document.getElementById('ambientMusicPlayer');
-    
-    if (!ambientDiv) {
-        ambientDiv = document.createElement('div');
-        ambientDiv.id = 'ambientMusicPlayer';
-        ambientDiv.className = `fixed bottom-4 right-4 z-[95] bg-white shadow-2xl border border-pink-200 rounded-3xl px-5 py-3 flex items-center gap-x-4 text-sm`;
-        ambientDiv.innerHTML = `
-            <div class="flex items-center gap-x-3">
-                <i class="fa-solid fa-music text-xl text-pink-500"></i>
-                <div class="leading-tight">
-                    <div class="font-bold text-gray-700 text-sm">Música Ambiente</div>
-                    <div class="text-[10px] text-gray-500">Toque para iniciar • Loop ativo</div>
-                </div>
-            </div>
-            
-            <button onclick="startAmbientPlayback(this)"
-                    class="px-5 py-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white text-xs font-extrabold rounded-2xl flex items-center gap-x-2 active:scale-[0.985] shadow-md">
-                <i class="fa-solid fa-play mr-1"></i> 
-                <span>TOCAR</span>
-            </button>
-            
-            <button onclick="stopAmbientMusic()" class="text-gray-400 hover:text-gray-600 px-2 text-lg leading-none">×</button>
-        `;
-        document.body.appendChild(ambientDiv);
-    } else {
-        ambientDiv.style.display = 'flex';
-    }
-    
-    let ambientIframe = document.getElementById('ambientIframe');
-    if (!ambientIframe) {
-        ambientIframe = document.createElement('iframe');
-        ambientIframe.id = 'ambientIframe';
-        ambientIframe.style.cssText = 'position:absolute; left:-9999px; width:1px; height:1px; opacity:0; pointer-events:none;';
-        ambientIframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-        document.body.appendChild(ambientIframe);
-        window.ambientIframeEl = ambientIframe;
-    }
-    
-    ambientIframe.src = `https://www.youtube.com/embed/${VIDEO_AMBIENT}?autoplay=1&mute=1&modestbranding=1&rel=0&showinfo=0&playsinline=1&loop=1&playlist=${VIDEO_AMBIENT}`;
-    window.ambientPlaying = false;
-}
+// Música de fundo automática e sem interface (apenas quando NÃO é aniversário)
+function startBackgroundMusic() {
+    // Remove qualquer iframe anterior
+    const oldIframe = document.getElementById('backgroundMusicPlayer');
+    if (oldIframe) oldIframe.remove();
 
-function startAmbientPlayback(btn) {
-    const iframe = window.ambientIframeEl;
-    if (!iframe) return;
+    const iframe = document.createElement('iframe');
+    iframe.id = 'backgroundMusicPlayer';
+    iframe.style.cssText = 'position:absolute; left:-9999px; width:1px; height:1px; opacity:0; pointer-events:none;';
+    iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
     
+    // Tenta iniciar automaticamente com som
     iframe.src = `https://www.youtube.com/embed/${VIDEO_AMBIENT}?autoplay=1&mute=0&modestbranding=1&rel=0&showinfo=0&playsinline=1&loop=1&playlist=${VIDEO_AMBIENT}`;
-    window.ambientPlaying = true;
     
-    btn.outerHTML = `
-        <div class="flex items-center gap-x-2 px-4 py-1.5 bg-emerald-100 text-emerald-600 rounded-2xl text-xs font-bold">
-            <i class="fa-solid fa-volume-up"></i>
-            <span>TOCANDO</span>
-        </div>
-    `;
+    document.body.appendChild(iframe);
+    window.backgroundMusicIframe = iframe;
 }
 
-function stopAmbientMusic() {
-    const iframe = window.ambientIframeEl;
-    const player = document.getElementById('ambientMusicPlayer');
-    
-    if (iframe) iframe.src = '';
-    if (player) player.style.display = 'none';
-    window.ambientPlaying = false;
+function stopBackgroundMusic() {
+    const iframe = document.getElementById('backgroundMusicPlayer');
+    if (iframe) {
+        iframe.src = '';
+        iframe.remove();
+    }
 }
 
 function closePlayerModal() {
@@ -582,7 +538,7 @@ function launchConfetti() {
     }
 }
 
-// Initialization
+// Inicialização
 function init() {
     initTailwind();
     renderCurrentDate();
@@ -596,8 +552,11 @@ function init() {
             const player = document.getElementById('playerModal');
             const day = document.getElementById('dayModal');
             
-            if (!player.classList.contains('hidden')) closePlayerModal();
-            else if (!day.classList.contains('hidden')) closeDayModal();
+            if (!player.classList.contains('hidden')) {
+                closePlayerModal();
+            } else if (!day.classList.contains('hidden')) {
+                closeDayModal();
+            }
         }
     });
     
