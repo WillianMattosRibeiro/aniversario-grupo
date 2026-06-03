@@ -206,7 +206,7 @@ function renderStatus() {
             </div>
         `;
         
-        // Inicia o áudio automaticamente quando NÃO é dia de aniversário
+        // Tenta iniciar a música automaticamente
         setTimeout(() => {
             startBackgroundMusic();
         }, 1500);
@@ -391,7 +391,7 @@ function showDayModal(dia, mes, pessoas) {
                 </div>
                 <div class="text-center">
                     <div class="font-extrabold text-3xl text-gray-800">${p.nome}</div>
-                    <div class="text-pink-500 font-semibold">Feliz Aniversário!</div>
+                    <div class="text-pink-500 font-semibold">Faz Aniversário!</div>
                 </div>
             </div>
         `;
@@ -494,16 +494,17 @@ function startBackgroundMusic() {
     backgroundAudio.loop = true;
     backgroundAudio.volume = 0.55;
 
-    // Tenta tocar automaticamente
     const playPromise = backgroundAudio.play();
 
     if (playPromise !== undefined) {
         playPromise
             .then(() => {
-                console.log('%c[Audio] grilo.mp3 iniciado com sucesso', 'color:#22c55e');
+                console.log('%c[Audio] grilo.mp3 iniciado automaticamente', 'color:#22c55e');
+                removeEnableSoundButton();
             })
-            .catch((error) => {
-                console.log('%c[Audio] Autoplay bloqueado pelo navegador. Música só tocará após interação do usuário.', 'color:#eab308');
+            .catch(() => {
+                console.log('%c[Audio] Autoplay bloqueado. Mostrando botão "Ativar som"', 'color:#eab308');
+                showEnableSoundButton();
             });
     }
 }
@@ -513,6 +514,44 @@ function stopBackgroundMusic() {
         backgroundAudio.pause();
         backgroundAudio = null;
     }
+    removeEnableSoundButton();
+}
+
+// ====================== BOTÃO "ATIVAR SOM" (Topo Direito) ======================
+
+function showEnableSoundButton() {
+    // Remove botão anterior se existir
+    removeEnableSoundButton();
+
+    const btn = document.createElement('button');
+    btn.id = 'enableSoundBtn';
+    btn.className = `fixed top-4 right-4 z-[9999] flex items-center gap-x-2 px-5 py-2.5 
+                     bg-pink-600 hover:bg-pink-700 active:bg-pink-800 text-white 
+                     text-sm font-bold rounded-2xl shadow-xl transition-all active:scale-95`;
+    btn.innerHTML = `
+        <i class="fa-solid fa-volume-up text-lg"></i>
+        <span>Ativar som</span>
+    `;
+
+    btn.onclick = () => {
+        if (backgroundAudio) {
+            backgroundAudio.play().catch(() => {});
+        } else {
+            // Caso o áudio ainda não tenha sido criado
+            backgroundAudio = new Audio('assets/grilo.mp3');
+            backgroundAudio.loop = true;
+            backgroundAudio.volume = 0.55;
+            backgroundAudio.play().catch(() => {});
+        }
+        removeEnableSoundButton();
+    };
+
+    document.body.appendChild(btn);
+}
+
+function removeEnableSoundButton() {
+    const btn = document.getElementById('enableSoundBtn');
+    if (btn) btn.remove();
 }
 
 // ====================== CONFETTI ======================
